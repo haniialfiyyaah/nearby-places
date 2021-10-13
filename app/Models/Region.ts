@@ -20,17 +20,17 @@ export default class Region extends BaseModel {
   @column()
   public longitude: number
 
-  @column()
+  @column({ serializeAs: null })
   public location: string
-
-  @beforeSave()
-  public static assignLocation(region: Region) {
-    region.location = `(${region.latitude},${region.longitude})`
-  }
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
+
+  @beforeSave()
+  public static assignLocation(region: Region) {
+    region.location = `(${region.latitude},${region.longitude})`
+  }
 }

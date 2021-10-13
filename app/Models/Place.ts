@@ -24,7 +24,7 @@ export default class Place extends BaseModel {
   @column()
   public longitude: number
 
-  @column()
+  @column({ serializeAs: null })
   public location: string
 
   @column.dateTime({ autoCreate: true })
