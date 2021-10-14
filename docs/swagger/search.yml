@@ -34,19 +34,18 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/SearchResponse'
+                $ref: '#/components/schemas/SearchResponse'
 
 components:
-  responses:
+  schemas:
     SearchResponse:
       type: 'object'
       properties:
         data:
-          $ref: '#/components/examples/ArrayOfPlaces'
+          $ref: '#/components/schemas/ArrayOfPlaces'
         total:
           type: 'number'
           example: 2
-  examples:
     ArrayOfPlaces:
       type: 'array'
       items:
@@ -66,7 +65,6 @@ components:
           district_name: 'Kecamatan Antapani'
           latitude: -6.916428901401269
           longitude: 107.66058554494842
-  schemas:
     Place:
       type: 'object'
       properties:
