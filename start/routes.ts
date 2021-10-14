@@ -21,10 +21,6 @@
 import Route from '@ioc:Adonis/Core/Route'
 import Database from '@ioc:Adonis/Lucid/Database'
 
-Route.get('/', async () => {
-  //
-})
-
 Route.get('/search', async ({ request }) => {
   const { longitude, latitude, category_id } = request.qs()
   // error required
@@ -34,7 +30,6 @@ Route.get('/search', async ({ request }) => {
       message: 'Longitude and latitude is required as query',
     }
   }
-
   const { rows } = await Database.rawQuery(`
     select * from (SELECT places.id, places.name, places .category_id, places.latitude, places.longitude, regions.city_name, regions.district_name, ( 5000 * acos( cos( radians(${latitude}) ) * cos( radians( places.latitude ) ) * cos( radians( places.longitude ) - radians(${longitude}) ) + sin( radians(${latitude}) ) * sin( radians( places.latitude ) ) ) ) AS distance
     FROM places join regions on places.region_id = regions.id ${
@@ -46,3 +41,5 @@ Route.get('/search', async ({ request }) => {
 
   return { total: rows.length, data: rows }
 })
+
+Route.any('*', ({ response }) => response.redirect().toPath('/docs'))
