@@ -34,14 +34,6 @@ Route.get('/search', async ({ request }) => {
       message: 'Longitude and latitude is required as query',
     }
   }
-  // search location
-  // const { rows } = await Database.rawQuery(`
-  //   select * from (SELECT  *,
-  //   ( 5000 * acos( cos( radians(${latitude}) ) * cos( radians( latitude ) ) * cos( radians( longitude )
-  //   - radians(${longitude}) ) + sin( radians(${latitude}) ) * sin( radians( latitude ) ) ) ) AS distance
-  //   FROM places ${category_id ? `where category_id=${category_id}` : ''} ) al
-  //   where distance < 5
-  //   ORDER BY distance`)
 
   const { rows } = await Database.rawQuery(`
     select * from (SELECT places.id, places.name, places .category_id, places.latitude, places.longitude, regions.city_name, regions.district_name, ( 5000 * acos( cos( radians(${latitude}) ) * cos( radians( places.latitude ) ) * cos( radians( places.longitude ) - radians(${longitude}) ) + sin( radians(${latitude}) ) * sin( radians( places.latitude ) ) ) ) AS distance
@@ -52,5 +44,5 @@ Route.get('/search', async ({ request }) => {
     where distance < 5
     ORDER BY distance`)
 
-  return rows
+  return { total: rows.length, data: rows }
 })
