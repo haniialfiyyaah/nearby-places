@@ -10,7 +10,7 @@ export default class Regions extends BaseSchema {
       table
         .enu('level', ['Kabupaten/Kota', 'Kecamatan', 'Kelurahan/Desa'])
         .notNullable()
-      table.string('kemendagri_code').unique()
+      table.string('kemendagri_code')
       table.float('latitude')
       table.float('longitude')
       table.specificType('location', 'point')
