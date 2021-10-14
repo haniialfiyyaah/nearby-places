@@ -36,6 +36,15 @@ export default class Region extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
 
+  @column()
+  public city_name: string
+
+  @column()
+  public district_name: string
+
+  @column()
+  public village_name: string
+
   @beforeSave()
   public static assignLocation(region: Region) {
     region.location = `(${region.latitude},${region.longitude})`

@@ -46,7 +46,7 @@ export default class PlaceSeeder extends BaseSeeder {
 
       for (const i in pola) {
         const [cat, total, fName] = pola[i]
-        console.log(`Please wait ... \n Cteated ${total} places`)
+        console.log(`Please wait ... \n Creating ${total} places`)
 
         /* Create category */
         await Category.create({ name: cat })
@@ -68,7 +68,7 @@ export default class PlaceSeeder extends BaseSeeder {
               radius
             )
 
-            /* Create places */
+            /* Create place */
             await Place.create({
               name,
               category_id,
@@ -79,6 +79,7 @@ export default class PlaceSeeder extends BaseSeeder {
           }
         }
       }
+      console.log(`---------------------------`)
     }
   }
 }
