@@ -8,7 +8,7 @@ export default class RegionSeeder extends BaseSeeder {
   public async run() {
     /* kabupaten */
     // let cities = await readFile('data-kabupaten.json')
-    const { data: kab }: { data } = await axios.get(`${URL_KAB}?limit=6000`)
+    const { data: kab }: { data } = await axios.get(`${URL_KAB}?limit=50`)
     let cities = kab?.data
     cities = filterWilayah(cities, 'kota', 'Kabupaten/Kota')
     await Region.createMany(cities)
@@ -22,7 +22,7 @@ export default class RegionSeeder extends BaseSeeder {
 
     /* kelurahan */
     // let villages = await readFile('data-kelurahan.json')
-    const { data: kel }: { data } = await axios.get(`${URL_KEL}?limit=50`)
+    const { data: kel }: { data } = await axios.get(`${URL_KEL}?limit=6000`)
     let villages = kel?.data
     villages = filterWilayah(villages, 'kelurahan', 'Kelurahan/Desa')
     await Region.createMany(villages)
