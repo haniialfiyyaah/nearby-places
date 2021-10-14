@@ -8,6 +8,9 @@
     "start:prod": "node ./build/server.js",
     "postbuild": "cp -a docs/ build/docs"
   },
+  "engines": {
+    "node": "14.17.5"
+  },
   "devDependencies": {
     "@adonisjs/assembler": "^5.3.7",
     "adonis-preset-ts": "^2.1.0",
