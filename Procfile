@@ -1,0 +1,2 @@
+release: ENV_SILENT=true node build/ace migration:run --force && node build/ace db:seed --files "./database/seeders/Region.ts" && node build/ace db:seed --files "./database/seeders/Region.ts"
+web: npm run start:prod
