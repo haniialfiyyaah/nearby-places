@@ -1,5 +1,12 @@
 import { DateTime } from 'luxon'
-import { BaseModel, beforeSave, column } from '@ioc:Adonis/Lucid/Orm'
+import {
+  BaseModel,
+  beforeSave,
+  column,
+  HasMany,
+  hasMany,
+} from '@ioc:Adonis/Lucid/Orm'
+import Place from './Place'
 
 export default class Region extends BaseModel {
   @column({ isPrimary: true })
@@ -33,4 +40,9 @@ export default class Region extends BaseModel {
   public static assignLocation(region: Region) {
     region.location = `(${region.latitude},${region.longitude})`
   }
+
+  @hasMany(() => Place, {
+    foreignKey: 'region_id',
+  })
+  public places: HasMany<typeof Place>
 }

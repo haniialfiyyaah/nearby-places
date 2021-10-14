@@ -54,7 +54,7 @@ export default class PlaceSeeder extends BaseSeeder {
 
         /* Loop regions */
         for (const e in regions) {
-          const { name: nm, longitude, latitude } = regions[e]
+          const { id: region_id, name: nm, longitude, latitude } = regions[e]
 
           /* Create places by total */
           for (let i = 0; i < total; i++) {
@@ -62,7 +62,7 @@ export default class PlaceSeeder extends BaseSeeder {
             let name = fName(string.capitalCase(nm), i + 1)
 
             /* Random location */
-            let radius = Math.floor(Math.random() * 500 + 100)
+            let radius = Math.floor(Math.random() * 3000 + 100) // 0.3 - 3 km
             const location = randomLocation.randomCirclePoint(
               { latitude, longitude },
               radius
@@ -72,8 +72,9 @@ export default class PlaceSeeder extends BaseSeeder {
             await Place.create({
               name,
               category_id,
-              longitude: +location.longitude.toFixed(6),
-              latitude: +location.latitude.toFixed(6),
+              longitude: location.longitude,
+              latitude: location.latitude,
+              region_id,
             })
           }
         }

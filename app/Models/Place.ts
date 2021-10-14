@@ -7,6 +7,7 @@ import {
   column,
 } from '@ioc:Adonis/Lucid/Orm'
 import Category from './Category'
+import Region from './Region'
 
 export default class Place extends BaseModel {
   @column({ isPrimary: true })
@@ -27,6 +28,9 @@ export default class Place extends BaseModel {
   @column({ serializeAs: null })
   public location: string
 
+  @column({ serializeAs: null })
+  public region_id: number
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 
@@ -42,4 +46,9 @@ export default class Place extends BaseModel {
     foreignKey: 'category_id',
   })
   public category: BelongsTo<typeof Category>
+
+  @belongsTo(() => Region, {
+    foreignKey: 'region_id',
+  })
+  public region: BelongsTo<typeof Region>
 }

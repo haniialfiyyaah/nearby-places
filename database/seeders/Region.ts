@@ -1,23 +1,30 @@
 import BaseSeeder from '@ioc:Adonis/Lucid/Seeder'
 import filterWilayah from 'App/Helpers/filterWilayah'
-import readFile from 'App/Helpers/readFile'
 import Region from 'App/Models/Region'
+import axios from 'axios'
+import { URL_KAB, URL_KEC, URL_KEL } from 'Config/constants'
 
 export default class RegionSeeder extends BaseSeeder {
   public async run() {
     /* kabupaten */
-    const kab = await readFile('data-kabupaten.json')
-    const kabupaten = filterWilayah(kab, 'kota', 'Kabupaten/Kota')
-    await Region.createMany(kabupaten)
+    // let cities = await readFile('data-kabupaten.json')
+    const { data: kab }: { data } = await axios.get(`${URL_KAB}`)
+    let cities = kab?.data
+    cities = filterWilayah(cities, 'kota', 'Kabupaten/Kota')
+    await Region.createMany(cities)
 
     /* kecamatan */
-    const kec = await readFile('data-kecamatan.json')
-    const kecamatan = filterWilayah(kec, 'kecamatan', 'Kecamatan')
-    await Region.createMany(kecamatan)
+    // let districs = await readFile('data-kecamatan.json')
+    const { data: kec }: { data } = await axios.get(`${URL_KEC}`)
+    let districs = kec?.data
+    districs = filterWilayah(districs, 'kecamatan', 'Kecamatan')
+    await Region.createMany(districs)
 
     /* kelurahan */
-    const kel = await readFile('data-kelurahan.json')
-    const kelurahan = filterWilayah(kel, 'kelurahan', 'Kelurahan/Desa')
-    await Region.createMany(kelurahan)
+    // let villages = await readFile('data-kelurahan.json')
+    const { data: kel }: { data } = await axios.get(`${URL_KEL}`)
+    let villages = kel?.data
+    villages = filterWilayah(villages, 'kelurahan', 'Kelurahan/Desa')
+    await Region.createMany(villages)
   }
 }
