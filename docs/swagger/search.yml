@@ -4,9 +4,7 @@ paths:
       tags:
         - Places
       summary: 'Melakukan pencarian tempat/places dengan lokasi terdekat dari sebuah titik koordinat'
-      consumes:
-        - 'application/json'
-      produces:
+      content:
         - 'application/json'
       parameters:
         - in: 'query'
@@ -36,52 +34,55 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/definitions/SearchResponse'
+                $ref: '#/components/responses/SearchResponse'
 
-definitions:
-  SearchResponse:
-    type: 'object'
-    properties:
-      data:
-        $ref: '#/definitions/ArrayOfPlaces'
-      total:
-        type: 'number'
-        example: 2
-  ArrayOfPlaces:
-    type: 'array'
-    items:
-      $ref: '#/definitions/Place'
-    example:
-      - id: 1
-        name: 'Puskesmas Antapani 1'
-        category_id: 2
-        city_name: 'Kota Bandung'
-        district_name: 'Kecamatan Antapani'
-        latitude: -6.9131547622849965
-        longitude: 107.66358207489387
-      - id: 2
-        name: 'Puskesmas Antapani 2'
-        category_id: 2
-        city_name: 'Kota Bandung'
-        district_name: 'Kecamatan Antapani'
-        latitude: -6.916428901401269
-        longitude: 107.66058554494842
-  Place:
-    type: 'object'
-    properties:
-      id:
-        type: 'integer'
-      name:
-        type: 'string'
-      category_id:
-        type: 'integer'
-      city_name:
-        type: 'string'
-      district_name:
-        type: 'string'
-      latitude:
-        type: 'number'
-        format: 'float'
-      longitude:
-        type: 'number'
-        format: 'float'
+components:
+  responses:
+    SearchResponse:
+      type: 'object'
+      properties:
+        data:
+          $ref: '#/components/examples/ArrayOfPlaces'
+        total:
+          type: 'number'
+          example: 2
+  examples:
+    ArrayOfPlaces:
+      type: 'array'
+      items:
+        $ref: '#/components/schemas/Place'
+      example:
+        - id: 1
+          name: 'Puskesmas Antapani 1'
+          category_id: 2
+          city_name: 'Kota Bandung'
+          district_name: 'Kecamatan Antapani'
+          latitude: -6.9131547622849965
+          longitude: 107.66358207489387
+        - id: 2
+          name: 'Puskesmas Antapani 2'
+          category_id: 2
+          city_name: 'Kota Bandung'
+          district_name: 'Kecamatan Antapani'
+          latitude: -6.916428901401269
+          longitude: 107.66058554494842
+  schemas:
+    Place:
+      type: 'object'
+      properties:
+        id:
+          type: 'integer'
+        name:
+          type: 'string'
+        category_id:
+          type: 'integer'
+        city_name:
+          type: 'string'
+        district_name:
+          type: 'string'
+        latitude:
+          type: 'number'
+          format: 'float'
+        longitude:
+          type: 'number'
+          format: 'float'
