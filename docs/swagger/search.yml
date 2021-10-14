@@ -4,8 +4,6 @@ paths:
       tags:
         - Places
       summary: 'Melakukan pencarian tempat/places dengan lokasi terdekat dari sebuah titik koordinat'
-      content:
-        - 'application/json'
       parameters:
         - in: 'query'
           name: 'latitude'
