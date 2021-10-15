@@ -22,7 +22,8 @@ import Route from '@ioc:Adonis/Core/Route'
 import Database from '@ioc:Adonis/Lucid/Database'
 
 Route.get('/search', async ({ request }) => {
-  const { longitude, latitude, category_id } = request.qs()
+  const { longitude, latitude, category_id, limit, radius } = request.qs()
+  let distance_unit = 111.045 // km unit
   // error required
   if (!longitude || !latitude) {
     return {
@@ -30,14 +31,39 @@ Route.get('/search', async ({ request }) => {
       message: 'Longitude and latitude is required as query',
     }
   }
+
   const { rows } = await Database.rawQuery(`
-    select * from (SELECT places.id, places.name, places .category_id, places.latitude, places.longitude, regions.city_name, regions.district_name, ( 5000 * acos( cos( radians(${latitude}) ) * cos( radians( places.latitude ) ) * cos( radians( places.longitude ) - radians(${longitude}) ) + sin( radians(${latitude}) ) * sin( radians( places.latitude ) ) ) ) AS distance
-    FROM places join regions on places.region_id = regions.id ${
-      category_id ? `where category_id=${category_id}` : ''
-    }
-    ) al 
-    where distance < 5
-    ORDER BY distance`)
+      SELECT id, name, category_id, latitude, longitude, city_name, district_name, distance
+      FROM (
+      SELECT z.id, z.name, z.category_id,
+              z.latitude, z.longitude,
+              r.city_name, r.district_name,
+              p.radius,
+              p.distance_unit
+                      * DEGREES(ACOS(COS(RADIANS(p.latpoint))
+                      * COS(RADIANS(z.latitude))
+                      * COS(RADIANS(p.longpoint - z.longitude))
+                      + SIN(RADIANS(p.latpoint))
+                      * SIN(RADIANS(z.latitude)))) AS distance
+        FROM places AS z
+        JOIN regions as r ON z.region_id = r.id 
+        JOIN (   /* these are the query parameters */
+              SELECT  ${+latitude}  AS latpoint,  ${+longitude} AS longpoint,
+                      ${+radius || 5.0} AS radius,
+                      ${distance_unit} AS distance_unit
+          ) AS p ON 1=1
+        WHERE z.latitude
+          BETWEEN p.latpoint  - (p.radius / p.distance_unit)
+              AND p.latpoint  + (p.radius / p.distance_unit)
+          AND z.longitude
+          BETWEEN p.longpoint - (p.radius / (p.distance_unit * COS(RADIANS(p.latpoint))))
+              AND p.longpoint + (p.radius / (p.distance_unit * COS(RADIANS(p.latpoint))))
+          ${category_id ? `AND category_id=${category_id}` : ''}
+      ) AS d
+      WHERE distance <= radius
+      ORDER BY distance
+      LIMIT ${+limit || 20}
+  `)
 
   return { total: rows.length, data: rows }
 })

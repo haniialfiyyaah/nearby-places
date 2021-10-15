@@ -26,6 +26,18 @@ paths:
           schema:
             type: integer
           description: 'Filter berdasarkan Kategori.'
+        - in: 'query'
+          name: 'radius'
+          schema:
+            type: integer
+            default: 5
+          description: 'Tetapkan radius dalam km.'
+        - in: 'query'
+          name: 'limit'
+          schema:
+            type: integer
+            default: 20
+          description: 'Limit jumlah data.'
       responses:
         '200':
           description: 'Daftar tempat/places terdekat dengan lokasi terdekat.'
